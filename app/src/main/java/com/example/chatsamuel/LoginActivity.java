@@ -54,8 +54,14 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             finish();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            Toast.makeText(LoginActivity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
+                            //startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                            // Pasa el nombre de usuario a MainActivity
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("USERNAME", emailuser);
+                            startActivity(intent);
+                            // Toast de welcome
+                            Toast.makeText(LoginActivity.this, "Bienvenido" + emailuser, Toast.LENGTH_SHORT).show();
 
                         } else {
                             Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();

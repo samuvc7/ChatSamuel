@@ -32,7 +32,7 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         textViewUser.setText(message.getMessageUser());  // Utiliza el nombre de usuario actual
 
         TextView textViewTime = convertView.findViewById(R.id.message_time);
-        textViewTime.setText(getCurrentTime());  // Establece la hora actual
+        textViewTime.setText(message.getMessageTime());  // Establece la hora actual
 
         TextView textViewText = convertView.findViewById(R.id.message_text);
         textViewText.setText(message.getMessageText());
@@ -40,9 +40,4 @@ public class MessageAdapter extends ArrayAdapter<ChatMessage> {
         return convertView;
     }
 
-    private String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); // Formato de 24 horas (puedes ajustarlo según tus preferencias)
-        String currentTime = sdf.format(new Date());
-        return currentTime;
-    }
 }

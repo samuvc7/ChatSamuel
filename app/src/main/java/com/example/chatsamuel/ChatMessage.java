@@ -1,16 +1,17 @@
 package com.example.chatsamuel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ChatMessage {
     private String messageText;
     private String messageUser;
-    private long messageTime;
+    private String messageTime;
     public ChatMessage(String messageText, String messageUser) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         // Initialize to current time
-        messageTime = new Date().getTime();
+        messageTime = getCurrentTime();
     }
     public ChatMessage(){
     }
@@ -26,10 +27,16 @@ public class ChatMessage {
     public void setMessageUser(String messageUser) {
         this.messageUser = messageUser;
     }
-    public long getMessageTime() {
+    public String getMessageTime() {
         return messageTime;
     }
-    public void setMessageTime(long messageTime) {
+    public void setMessageTime(String messageTime) {
         this.messageTime = messageTime;
+    }
+
+    private String getCurrentTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm"); // Formato de 24 horas (puedes ajustarlo según tus preferencias)
+        String currentTime = sdf.format(new Date());
+        return currentTime;
     }
 }

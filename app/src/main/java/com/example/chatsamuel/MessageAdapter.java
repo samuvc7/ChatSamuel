@@ -1,5 +1,6 @@
 package com.example.chatsamuel;
 import android.content.Context;
+import android.transition.ChangeTransform;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,17 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-public class MessageAdapter extends ArrayAdapter<String> {
+public class MessageAdapter extends ArrayAdapter<ChatMessage> {
     private String currentUsername;
 
-    public MessageAdapter(Context context, List<String> messages, String currentUsername) {
+    public MessageAdapter(Context context, List<ChatMessage> messages) {
         super(context, 0, messages);
-        this.currentUsername = currentUsername;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Obtiene el mensaje actual
-        String message = getItem(position);
+        ChatMessage message = getItem(position);
 
         // Reutiliza la vista si está disponible, de lo contrario, infla una nueva
         if (convertView == null) {
@@ -29,13 +29,13 @@ public class MessageAdapter extends ArrayAdapter<String> {
 
         // Obtiene las referencias a los TextView en message.xml y establece los valores
         TextView textViewUser = convertView.findViewById(R.id.message_user);
-        textViewUser.setText(currentUsername);  // Utiliza el nombre de usuario actual
+        textViewUser.setText(message.getMessageUser());  // Utiliza el nombre de usuario actual
 
         TextView textViewTime = convertView.findViewById(R.id.message_time);
         textViewTime.setText(getCurrentTime());  // Establece la hora actual
 
         TextView textViewText = convertView.findViewById(R.id.message_text);
-        textViewText.setText(message);
+        textViewText.setText(message.getMessageText());
 
         return convertView;
     }

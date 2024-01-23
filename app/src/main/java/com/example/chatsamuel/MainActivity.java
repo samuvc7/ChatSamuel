@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
     private ListView messageListView;
     private FloatingActionButton sendButton;
     private String currentUsername; // Variable para almacenar el nombre de usuario actual
+    private DatabaseReference myRef; // Referencia global
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         inputEditText = findViewById(R.id.input);
         messageListView = findViewById(R.id.list_of_messages);
@@ -41,58 +41,53 @@ public class MainActivity extends AppCompatActivity {
         // Obtiene el nombre de usuario del Intent
         currentUsername = getIntent().getStringExtra("USERNAME");
 
+        ArrayList<ChatMessage> messages = new ArrayList<>();
 
-        ArrayList<String> messages = new ArrayList<>();
         // Crea el adaptador personalizado
-        MessageAdapter adapter = new MessageAdapter(this, messages, currentUsername);
+        MessageAdapter adapter = new MessageAdapter(this, messages);
 
         // Obtiene la referencia al ListView en activity_main.xml y asigna el adaptador
         messageListView.setAdapter(adapter);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://chatsamuel-e6df6-default-rtdb.europe-west1.firebasedatabase.app/");
+        myRef = database.getReference("messages");
 
-
-        //FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.floatingActionButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //EditText input = (EditText)findViewById(R.id.input);
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
-                FirebaseDatabase database = FirebaseDatabase.getInstance("https://chatsamuel-e6df6-default-rtdb.europe-west1.firebasedatabase.app/");
-                DatabaseReference myRef = database.getReference("mensaje");
-
-                String newMessage = inputEditText.getText().toString();
-                myRef.setValue(newMessage);
+                String newMessage = inputEditText.getText().toString().trim();
+                String messageUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
                 if (!newMessage.isEmpty()) {
-                    // Agrega el nuevo mensaje a la lista
-                    messages.add(newMessage);
-                    // Notifica al adaptador sobre el cambio en los datos
-                    adapter.notifyDataSetChanged();
-                    // Limpia el campo de entrada
+                    ChatMessage chatMessage = new ChatMessage(newMessage, messageUser);
                     inputEditText.setText("");
+
+                    // Usa push() para generar una clave única para cada mensaje
+                    myRef.push().setValue(chatMessage);
                 }
-
-
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and again
-                        // whenever data at this location is updated.
-                        String value = dataSnapshot.getValue(String.class);
-                        Log.d("MainActivity", "Value is: " + value);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Failed to read value
-                        Log.w("MainActivity", "Failed to read value.", error.toException());
-                    }
-                });
-
             }
         });
 
-    }
+        // Agrega un listener solo una vez para evitar escuchar eventos cada vez que se pulsa el botón
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                messages.clear(); // Limpia la lista antes de volver a cargar los mensajes
 
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChatMessage valorRegistro = snapshot.getValue(ChatMessage.class);
+                    messages.add(valorRegistro);
+                }
+
+                // Notifica al adaptador que los datos han cambiado
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Failed to read value
+                Log.w("MainActivity", "Failed to read value.", error.toException());
+            }
+        });
+    }
 }

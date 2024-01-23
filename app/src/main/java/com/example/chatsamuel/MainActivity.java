@@ -58,14 +58,12 @@ public class MainActivity extends AppCompatActivity {
                 //EditText input = (EditText)findViewById(R.id.input);
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("message");
-
-                myRef.setValue(FirebaseAuth.getInstance().getCurrentUser() + ": " + inputEditText.getText().toString());
-                // Clear the input
-                //inputEditText.setText("");
+                FirebaseDatabase database = FirebaseDatabase.getInstance("https://chatsamuel-e6df6-default-rtdb.europe-west1.firebasedatabase.app/");
+                DatabaseReference myRef = database.getReference("mensaje");
 
                 String newMessage = inputEditText.getText().toString();
+                myRef.setValue(newMessage);
+
                 if (!newMessage.isEmpty()) {
                     // Agrega el nuevo mensaje a la lista
                     messages.add(newMessage);

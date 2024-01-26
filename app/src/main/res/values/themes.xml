@@ -3,6 +3,9 @@
     <style name="Base.Theme.ChatSamuel" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/lila</item>
+        <item name="android:windowBackground">@color/lila</item>
+
     </style>
 
     <style name="Theme.ChatSamuel" parent="Base.Theme.ChatSamuel" />

@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="lila">#EFCEFA</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lilaoscuro">#59247F</color>
 </resources>

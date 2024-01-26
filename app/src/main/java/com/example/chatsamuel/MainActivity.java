@@ -3,6 +3,7 @@ package com.example.chatsamuel;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -89,5 +90,20 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("MainActivity", "Failed to read value.", error.toException());
             }
         });
+
+        //CAMBIAR TEMA DEPENDIENDO SI ES CLARO O OSCURO
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+
+                // Night mode is not active, we're using the light theme
+                // You can set your light theme here if needed
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is active, we're using dark theme
+                // You can set your dark theme here if needed
+                break;
+        }
     }
 }
